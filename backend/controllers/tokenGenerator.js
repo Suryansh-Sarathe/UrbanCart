@@ -6,10 +6,9 @@ const tokenGenerator = (user) => {
         name: user.name,
         password: user.password,
         email: user.email,
-        role: user.role
     };
-    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' });
-    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET, { expiresIn: '7d' });
+    const accessToken = jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET || "Mysecret", { expiresIn: '15m' });
+    const refreshToken = jwt.sign(payload, process.env.REFRESH_TOKEN_SECRET || "yourSecret", { expiresIn: '7d' });
 
     return {
         accessToken,
@@ -17,6 +16,7 @@ const tokenGenerator = (user) => {
     };
 }
 
+module.exports = tokenGenerator;
 
 
    

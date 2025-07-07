@@ -1,13 +1,13 @@
-const jwt = require('jsonwebtoken');
-const app = require('express');
-const router = app.Router();
+const express = require('express');
+const router = express.Router();
 const createUserId = require('../controllers/createUserId');
 const tokenGenerator = require('../controllers/tokenGenerator');
 const userVerification = require('../controllers/userVerification');
 const tokens = require('../../data/tokens');
 
-router.post('/signup', (req, res) => {
-    const { name, email, password } = req.body;
+
+    router.post('/', (req, res) => {
+    const { name, email, password, address, phone } = req.body;
 
     const {emailVerified} = userVerification({email, password});
     if (emailVerified) {
@@ -22,9 +22,8 @@ router.post('/signup', (req, res) => {
         name,
         email,
         password,
-        address: address || 'Enter your address',
-        phone: phone || 'Enter your phone number',
-        role: 'user'
+        address: address || '',
+        phone: phone || '',
     };
 
     // Generate tokens
@@ -37,13 +36,18 @@ router.post('/signup', (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: true, // Use secure cookies in production
+        secure: true,
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
     
-    res.status(201).json({
-        message: 'User created successfully',
-        user: newUser,
-        accessToken
+    res.cookie('accessToken', accessToken, {
+        httpOnly: true,
+        secure: true,
+        maxAge: 15 * 60 * 1000 // 15 minutes
     });
-} )
+    res.status(200).json({
+            message: 'Login successful',
+        });
+} ) 
+
+module.exports = router;

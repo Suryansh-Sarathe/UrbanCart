@@ -3,14 +3,14 @@ const app = express();
 const mongoose = require('mongoose');
 const signUp= require('./routes/SignUp')
 const login = require('./routes/login');
-
+const refresh = require('./routes/refresh');
 app.use(express.json()); 
 app.get('/', (req, res) => {
   res.send('Welcome to UrbanCart API');
 });
 app.use('/signup', signUp);
 app.use('/login', login);
-  
+app.use('/refresh', refresh);
 
 mongoose.connect('mongodb://localhost:27017/urbancart')
 .then(() => {

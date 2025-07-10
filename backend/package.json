@@ -14,6 +14,7 @@
   "author": "Suryansh Sarathe",
   "license": "ISC",
   "dependencies": {
+    "argon2": "^0.43.0",
     "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2",
     "mongoose": "^8.15.2",

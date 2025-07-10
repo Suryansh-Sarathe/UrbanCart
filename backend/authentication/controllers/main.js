@@ -1,10 +1,10 @@
 const accessTokenGenerator = require('./accessTokenGenerator');
 const refreshTokenGenerator = require('./refreshTokenGenerator');
-const tokenVerification = require('./tokenVerification');
+const verifyAccessToken = require('./verifyAccessToken');
+const verifyRefreshToken = require('./verifyRefreshToken');
 const hashPassword = require('./hashPassword');
 const passwordVerification = require('./passwordVerification');
 const addSaltToPassword = require('./addSaltToPassword');
-const { verify } = require('jsonwebtoken');
 
 module.exports = {
     accessTokenGenerator,

@@ -13,9 +13,9 @@ router.post('/', async (req, res) => {
         return res.status(400).json({error: 'User does not exist'});
     }
     try{
-        hashedPassword = await hashPassword(await addSaltToPassword(password));
+        saltedPassword = await addSaltToPassword(password);
 
-        const isValidPassword = await passwordVerification(hashedPassword, existingUser.password);
+        const isValidPassword = await passwordVerification(saltedPassword, existingUser.password);
         if (!isValidPassword) {
             return res.status(400).json({error: 'Invalid password'});
         }
@@ -27,15 +27,6 @@ router.post('/', async (req, res) => {
     const accessToken = accessTokenGenerator(existingUser);
     const refreshToken = refreshTokenGenerator(existingUser._id);
 
-    res.status(200).json({
-        message: 'Login successful',
-        accessToken,
-        user: {
-            id: existingUser._id,
-            username: existingUser.username,
-            email: existingUser.email,
-        }
-    });
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
         secure: true,
@@ -46,6 +37,16 @@ router.post('/', async (req, res) => {
         secure: true,
         maxAge: 15 * 60 * 1000 // 15 minutes
     });
+    res.status(200).json({
+        message: 'Login successful',
+        accessToken,
+        user: {
+            id: existingUser._id,
+            username: existingUser.username,
+            email: existingUser.email,
+        }
+    });
+    
 });
 
 module.exports = router;

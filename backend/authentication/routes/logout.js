@@ -5,7 +5,9 @@ router.post('/', (req, res) => {
     res.clearCookie('accessToken', { httpOnly: true, secure: true });
     res.clearCookie('refreshToken', { httpOnly: true, secure: true });
 
-    res.redirect('/login');
+    res.status(200).json({
+        message: 'Logout successful',
+    });
 });
 
 module.exports = router;

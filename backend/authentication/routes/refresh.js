@@ -2,7 +2,7 @@ const {accessTokenGenerator,refreshTokenGenerator} = require('../controllers/mai
 const express = require('express');
 const router = express.Router();
 const {verifyRefreshToken} = require('../controllers/main');
-const {User} = require('../models/main');
+const {user} = require('../../models/main');
 
 router.post('/', async (req, res) => {
     const {refreshToken} = req.body;
@@ -13,26 +13,17 @@ router.post('/', async (req, res) => {
     }
     try {
         // Verify the refresh token
-        const userId = await verifyRefreshToken(refreshToken);
+        const tokenDecoded = await verifyRefreshToken(refreshToken);
         
-        if (!userId) {
+        if (!tokenDecoded) {
             res.redirect('/login');
             return;
         }
         // Find the user by ID
-        const user = await User.findById(userId);
-        const accessToken = accessTokenGenerator(user);
-        const newRefreshToken = refreshTokenGenerator(userId);
+        const newUser = await user.findById(tokenDecoded._id);
+        const accessToken = accessTokenGenerator(newUser);
+        const newRefreshToken = refreshTokenGenerator(tokenDecoded._id);
 
-        res.status(200).json({
-            message: 'Access token refreshed successfully',
-            accessToken,
-            user: {
-                id: user._id,
-                username: user.username,
-                email: user.email,
-            }
-        });
         res.cookie('refreshToken', newRefreshToken, {
             httpOnly: true,
             secure: true,
@@ -42,6 +33,15 @@ router.post('/', async (req, res) => {
             httpOnly: true,
             secure: true,
             maxAge: 15 * 60 * 1000 // 15 minutes
+        });
+        res.status(200).json({
+            message: 'Access token refreshed successfully',
+            accessToken,
+            user: {
+                id: tokenDecoded._id,
+                username: user.username,
+                email: user.email,
+            }
         });
 
     } catch (error) {

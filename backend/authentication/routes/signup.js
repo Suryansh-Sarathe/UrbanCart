@@ -1,14 +1,14 @@
-const {User} = require('../models/main');
+const {user} = require('../../models/main');
 const {hashPassword, addSaltToPassword} = require('../controllers/main');
-const {accessTokenGenerator, refreshTokenGenerator} = require('../controllers/main');
+// const {accessTokenGenerator, refreshTokenGenerator} = require('../controllers/main');
 const express = require('express');
 const router = express.Router();
 
 router.post('/', async (req, res) => {
-    const {username, email, password, gender, dateOfBirth, address, phone, createdAt, updatedAt} = req.body;
+    const {name, email, password, gender, dateOfBirth, address, phone, createdAt, updatedAt} = req.body;
 
     // Check if user already exists
-    const existingUser = await User.findOne({email:email})
+    const existingUser = await user.findOne({email:email})
     if (existingUser) {
         return res.status(400).json({error: 'User already exists'});
     }
@@ -20,8 +20,8 @@ router.post('/', async (req, res) => {
         if (!hashedPassword) {
             return res.status(500).json({error: 'Error hashing password'});
         }
-        const newUser = new User({
-            username,
+        const newUser = new user({
+            name,
             email,
             password: hashedPassword,
             gender,
@@ -52,7 +52,7 @@ router.post('/', async (req, res) => {
         //     accessToken,
         //     user: {
         //         id: newUser._id,
-        //         username: newUser.username,
+        //         name: newUser.name,
         //         email: newUser.email,
         //     }
         // });

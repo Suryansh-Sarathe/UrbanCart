@@ -40,32 +40,31 @@ router.post('/', async (req, res) => {
         
         // Save user to database
         await newUser.save();
-
-        res.redirect('/login');
         
-        // // Generate access and refresh tokens
-        // const accessToken = accessTokenGenerator(newUser);
-        // const refreshToken = refreshTokenGenerator(newUser._id);
+        // Generate access and refresh tokens
+        const accessToken = accessTokenGenerator(newUser);
+        const refreshToken = refreshTokenGenerator(newUser._id);
         
-        // res.status(201).json({
-        //     message: 'User created successfully',
-        //     accessToken,
-        //     user: {
-        //         id: newUser._id,
-        //         name: newUser.name,
-        //         email: newUser.email,
-        //     }
-        // });
-        // res.cookie('accessToken', accessToken, {
-        //     httpOnly: true,
-        //     secure: true,
-        //     maxAge: 15 * 60 * 1000 // 15 minutes
-        // });
-        // res.cookie('refreshToken', refreshToken, {
-        //     httpOnly: true,
-        //     secure: true,
-        //     maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
-        // });
+        res.cookie('accessToken', accessToken, {
+            httpOnly: true,
+            secure: false, // Set to true if using HTTPS
+            maxAge: 15 * 60 * 1000 // 15 minutes
+        });
+        res.cookie('refreshToken', refreshToken, {
+            httpOnly: true,
+            secure: false, // Set to true if using HTTPS
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+        });
+        res.status(201).json({
+            message: 'User created successfully',
+            accessToken,
+            user: {
+                id: newUser._id,
+                name: newUser.name,
+                email: newUser.email,
+            }
+        });
+        
     } catch (error) {
         console.error('Error during signup:', error);
         res.status(500).json({error: 'Internal server error'});

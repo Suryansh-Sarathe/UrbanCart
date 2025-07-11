@@ -29,12 +29,12 @@ router.post('/', async (req, res) => {
 
     res.cookie('refreshToken', refreshToken, {
         httpOnly: true,
-        secure: true,
+        secure: false, // Set to true if using HTTPS
         maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
     });
     res.cookie('accessToken', accessToken, {
         httpOnly: true,
-        secure: true,
+        secure: false, // Set to true if using HTTPS
         maxAge: 15 * 60 * 1000 // 15 minutes
     });
     res.status(200).json({

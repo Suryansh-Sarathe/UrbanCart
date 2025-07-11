@@ -1,6 +1,6 @@
 const {user} = require('../../models/main');
 const {hashPassword, addSaltToPassword} = require('../controllers/main');
-// const {accessTokenGenerator, refreshTokenGenerator} = require('../controllers/main');
+const {accessTokenGenerator, refreshTokenGenerator} = require('../controllers/main');
 const express = require('express');
 const router = express.Router();
 
@@ -13,7 +13,7 @@ router.post('/', async (req, res) => {
         return res.status(400).json({error: 'User already exists'});
     }
     try {
-        const saltedPassword = await addSaltToPassword(password);
+        const saltedPassword = addSaltToPassword(password);
         
         const hashedPassword = await hashPassword(saltedPassword);
         

@@ -3,6 +3,7 @@ const app = express();
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const authenticationRoutes = require('./authentication/routes/main');
+const update = require('./routes/updateUser')
 app.use(cookieParser());
 app.use(express.json());
 
@@ -16,6 +17,7 @@ mongoose.connect('mongodb://localhost:27017/urbancart')
 app.get('/', (req, res) => {
     res.send('Welcome to UrbanCart API');
 });
+app.use('/api/user/update',update); //Temporary
 
 app.use('/api/auth', authenticationRoutes);
 

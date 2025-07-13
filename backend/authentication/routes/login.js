@@ -16,8 +16,8 @@ router.post('/', async (req, res) => {
         saltedPassword = await addSaltToPassword(password);
 
         const isValidPassword = await passwordVerification(saltedPassword, existingUser.password);
-        if (!isValidPassword) {
-            return res.status(400).json({error: 'Invalid password'});
+        if (!isValidPassword.value) {
+            return res.status(400).json({"error":isValidPassword.error});
         }
     }
     catch (error) {

@@ -4,6 +4,8 @@ const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const authenticationRoutes = require('./authentication/routes/main');
 const update = require('./routes/updateUser')
+const preferences = require('./routes/preferences')
+
 app.use(cookieParser());
 app.use(express.json());
 
@@ -18,9 +20,14 @@ app.get('/', (req, res) => {
     res.send('Welcome to UrbanCart API');
 });
 app.use('/api/user/update',update); //Temporary
+app.use('/api/user/preferences',preferences); //Temporary
 
 app.use('/api/auth', authenticationRoutes);
 
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 }); 
+
+//68729c4c5f4d23b60c3a831c
+//68729c4c5f4d23b60c3a8320
+//68729c4c5f4d23b60c3a8327

@@ -6,12 +6,12 @@ const passwordVerification = async (saltedpassword, hashedPassword) => {
         const isValid = await argon2.verify(hashedPassword, saltedpassword);
         
         if (isValid) {
-            return  true
+            return  {value:true,error:null}
         } else {
-            return false
+            return {value:false,error:"Invalid Password"}
         } 
-    }catch (error) {
-        return null; // Return null in case of an error
+    }catch (e) {
+        return {value:null,error:e}; // Return null in case of an error
     }
 }
 

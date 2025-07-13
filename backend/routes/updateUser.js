@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { user } = require('../models/main');
 const {verifyAccessToken} = require('../authentication/controllers/main')
+const {hashPassword,addSaltToPassword} = require('../authentication/controllers/main')
 
 router.patch('/', async (req, res) => {
 
@@ -13,7 +14,8 @@ router.patch('/', async (req, res) => {
     
     try {
         const updatedUserInfo = req.body;
-
+        const saltedPassword = addSaltToPassword(updatedUserInfo.password)
+        updatedUserInfo.password = await hashPassword(saltedPassword);
         const oldUser = await user.findByIdAndUpdate(
             tokenDecoded.id,
             updatedUserInfo,

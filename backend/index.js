@@ -27,7 +27,3 @@ app.use('/api/auth', authenticationRoutes);
 app.listen(3000, () => {
     console.log('Server is running on http://localhost:3000');
 }); 
-
-//68729c4c5f4d23b60c3a831c
-//68729c4c5f4d23b60c3a8320
-//68729c4c5f4d23b60c3a8327

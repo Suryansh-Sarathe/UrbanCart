@@ -1,5 +1,5 @@
 const mongoose = require('mongoose');
-const { categories } = require('./main');
+// const { categories } = require('./main');
 const preferencesSchema = new mongoose.Schema({
     userId: {
         type: mongoose.Schema.Types.ObjectId,

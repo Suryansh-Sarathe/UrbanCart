@@ -10,18 +10,18 @@ router.post('/', async (req, res) => {
     // Check if user exists
     const existingUser = await user.findOne({email:email});
     if (!existingUser) {
-        return res.status(400).json({error: 'User does not exist'});
+        return res.status(400).json({"credentials":false,error: 'User does not exist'});
     }
     try{
         saltedPassword = await addSaltToPassword(password);
 
         const isValidPassword = await passwordVerification(saltedPassword, existingUser.password);
         if (!isValidPassword.value) {
-            return res.status(400).json({"error":isValidPassword.error});
+            return res.status(400).json({"credentials":false,"error":isValidPassword.error});
         }
     }
     catch (error) {
-        return res.status(500).json({error: 'Error verifying password'});
+        return res.status(500).json({"credentials":false,error: 'Error verifying password'});
     }
     // Generate access and refresh tokens
     const accessToken = accessTokenGenerator(existingUser);
@@ -39,6 +39,7 @@ router.post('/', async (req, res) => {
     });
     res.status(200).json({
         message: 'Login successful',
+        "credentials":true,
         accessToken,
         user: {
             id: existingUser._id,

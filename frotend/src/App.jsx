@@ -1,10 +1,20 @@
-import { useRef } from 'react'
-
+import { useState,useRef } from 'react'
+import verifyCredentials from './handlers/verifyCredentials';
 export default function App() {
+  const [errorMessage,setErrorMessage] = useState('');
   const emailRef = useRef(null);
   const passwordRef = useRef(null);
-  const loginHandler = () => {
-     
+  const loginHandler = async () => {
+    const email = emailRef.current.value;
+    const password = passwordRef.current.value;
+    const result = await verifyCredentials(email,password);
+    if(!result.credentials){
+      setErrorMessage(result.error);
+      alert(errorMessage);
+    }
+    else{
+      //redirect to dashboard
+    }
   }
   return (
     <>
